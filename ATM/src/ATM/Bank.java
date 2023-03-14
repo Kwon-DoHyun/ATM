@@ -209,7 +209,7 @@ public class Bank {
 				int num = loginUser.getAccsAccounts().get(idx).getAccountNum();
 				System.out.println("계좌번호"+num+"삭제완료");
 				loginUser.getAccsAccounts().remove(idx);
-				
+				loginUser.setAccountCount(loginUser.getAccountCount() - 1);
 				
 			} else {
 				System.out.println("번호를 다시 입력하십시오");
