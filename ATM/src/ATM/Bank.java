@@ -44,11 +44,12 @@ public class Bank {
 		}
 
 	}
+
 //	==============기본셋팅======================
 	void inIt() {
-		this.log=-1;
+		this.log = -1;
 	}
-	
+
 //	==============회원가입======================
 	private void signUp() {
 
@@ -118,17 +119,15 @@ public class Bank {
 		String password = inputToString("password");
 
 		User loginUser = new User(null, id, password);
-		
-		
-		int idx =checkIdPwToLogin(loginUser);
-		
-		if(idx!=-1) {
-		this.	log=idx;
-		}else {
+
+		int idx = checkIdPwToLogin(loginUser);
+
+		if (idx != -1) {
+			this.log = idx;
+		} else {
 			System.out.println("미존재 계정");
 		}
 	}
-
 
 	private int checkIdPwToLogin(User user) {
 
@@ -142,51 +141,85 @@ public class Bank {
 
 		return chk;
 	}
-	//==============개설======================
+
+	// ==============개설======================
 	private void openingAccount() {
-		
-		if(this.log!=-1) {
+
+		if (this.log != -1) {
 			User loginUser = um.getUser(log);
-			if(loginUser.getAccountCount()<=3) {
-				
-				
-				
-			}else {
+			if (loginUser.getAccountCount() < 3) {
+				String id = loginUser.getId();
+				int accountNum = makeAccountCode();
+
+				Account newAccount = new Account(id, accountNum, 0);
+				// 이제 만든걸 유저 안 리스트랑 저쪽에 하나씩
+				am.createAccount(newAccount);
+				loginUser.createAccount(newAccount);
+				loginUser.setAccountCount(loginUser.getAccountCount() + 1);
+				System.out.println("완료");
+
+			} else {
 				System.out.println("더이상 생성 불가");
 			}
-			
+
 		}
-		
-		
+
 	}
-	private void makeAccountCode() {
+
+	private int makeAccountCode() {
 		Random ran = new Random();
-		while(true) {
-			
+
+		int num = -1;
+		while (true) {
+
 			boolean check = true;
-			
-			
-			int num= ran.nextInt(899999)+100000;
-			
+
+			num = ran.nextInt(899999) + 100000;
+
 			for (int i = 0; i < am.getSize(); i++) {
-		if(num ==am.getAccount(i).getAccountNum())	{
-			check=false;
-		}
-				
+				if (num == am.getAccount(i).getAccountNum()) {
+					check = false;
+				}
+
 			}
-			
-			
-			if(check) {
+
+			if (check) {
 				break;
 			}
 		}
-		
+
+		return num;
 	}
-	
-	
-	
-	
-	//==============로그인======================
+
+	// ==============계좌 삭제======================
+	private void closingAccount() {
+		if (this.log != -1) {
+
+			User loginUser = um.getUser(log);
+
+			for (int i = 0; i < loginUser.getAccountCount(); i++) {
+				Account a = loginUser.getAccsAccounts().get(i);
+				System.out.printf("%d acc:%d cash:%d \n", i + 1, a.getAccountNum(), a.getCash());
+
+			}
+
+			int idx = inputToInt("삭제할 계정의 번호") - 1;
+			if (idx >= 0 && idx < loginUser.getAccountCount()) {
+				
+				int num = loginUser.getAccsAccounts().get(idx).getAccountNum();
+				System.out.println("계좌번호"+num+"삭제완료");
+				loginUser.getAccsAccounts().remove(idx);
+				
+				
+			} else {
+				System.out.println("번호를 다시 입력하십시오");
+			}
+
+		}
+
+	}
+
+	// ==============계좌 삭제======================
 
 	public void run() {
 		inIt();
@@ -199,10 +232,15 @@ public class Bank {
 			if (sel == 1) {
 				signUp();
 			} else if (sel == 2) {
+				leave();
 			} else if (sel == 3) {
+				openingAccount();
 			} else if (sel == 4) {
+				closingAccount();
 			} else if (sel == 5) {
-			} else if (sel == 6) { this.log=-1;
+				login();
+			} else if (sel == 6) {
+				this.log = -1;
 			} else if (sel == 0) {
 			}
 

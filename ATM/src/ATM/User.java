@@ -9,7 +9,7 @@ public class User {
 	String password;
 
 	int accountCount;
-	ArrayList<Account> accsAccounts;
+	ArrayList<Account> accsAccounts = new  ArrayList<Account>();
 
 	User(String name, String id, String password) {
 		this.name = name;
@@ -33,7 +33,21 @@ public class User {
 	public int getAccountCount() {
 		return accountCount;
 	}
+	
+	
 
+
+	public ArrayList<Account> getAccsAccounts() {
+		return accsAccounts;
+	}
+
+	public void setAccountCount(int accountCount) {
+		this.accountCount = accountCount;
+	}
+
+	public void createAccount(Account account) {
+		this.accsAccounts.add(account);
+	}
 	public String toString() {
 		return String.format("%s [id:%s pw:%s] /(%d)", this.name, this.id, this.password, this.accountCount);
 
