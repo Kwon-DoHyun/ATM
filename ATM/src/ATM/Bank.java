@@ -1,5 +1,6 @@
 package ATM;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Bank {
@@ -9,8 +10,9 @@ public class Bank {
 	private String name;
 	private UserManager um = new UserManager();
 	private AccountManager am = new AccountManager();
+	private int log;
 
-	public	Bank(String name) {
+	public Bank(String name) {
 		this.name = name;
 	}
 
@@ -35,16 +37,20 @@ public class Bank {
 		return input;
 	}
 
-	private	void print() {
+	private void print() {
 
 		for (int i = 0; i < um.getSize(); i++) {
 			System.out.println(um.getUser(i));
 		}
 
 	}
-
+//	==============기본셋팅======================
+	void inIt() {
+		this.log=-1;
+	}
+	
 //	==============회원가입======================
-private	void signUp() {
+	private void signUp() {
 
 		String name = inputToString("이름");
 		String id = inputToString("id");
@@ -62,7 +68,7 @@ private	void signUp() {
 
 	}
 
-private	boolean duppleCheckUser(User user) {
+	private boolean duppleCheckUser(User user) {
 
 		boolean chk = true;
 		for (int i = 0; i < um.getSize(); i++) {
@@ -83,7 +89,7 @@ private	boolean duppleCheckUser(User user) {
 
 		User delUser = new User(delName, delId, delPassword);
 		int idx = leaveCheckUser(delUser);
-		if (idx!=-1) {
+		if (idx != -1) {
 
 			um.delUser(idx);
 		} else {
@@ -92,33 +98,98 @@ private	boolean duppleCheckUser(User user) {
 		}
 
 	}
-public	int  leaveCheckUser(User delUser) {
-	int index = -1;
-	for (int i = 0; i < um.getSize(); i++) {
-		if (delUser.equals(um.getUser(i)) ) {
-			index = i;
+
+	public int leaveCheckUser(User delUser) {
+		int index = -1;
+		for (int i = 0; i < um.getSize(); i++) {
+			if (delUser.equals(um.getUser(i))) {
+				index = i;
+			}
+		}
+
+		return index;
+	}
+
+//==============로그인======================
+	private void login() {
+
+		System.out.println("로그인");
+		String id = inputToString("id");
+		String password = inputToString("password");
+
+		User loginUser = new User(null, id, password);
+		
+		
+		int idx =checkIdPwToLogin(loginUser);
+		
+		if(idx!=-1) {
+		this.	log=idx;
+		}else {
+			System.out.println("미존재 계정");
 		}
 	}
-	
 
-return index;
+
+	private int checkIdPwToLogin(User user) {
+
+		int chk = -1;
+		;
+		for (int i = 0; i < um.getSize(); i++) {
+			if (user.getId().equals(um.getUser(i).getId()) && user.getPassword().equals(um.getUser(i).getPassword())) {
+				chk = i;
+			}
+		}
+
+		return chk;
 	}
-
+	//==============개설======================
+	private void openingAccount() {
+		
+		if(this.log!=-1) {
+			User loginUser = um.getUser(log);
+			if(loginUser.getAccountCount()<=3) {
+				
+				
+				
+			}else {
+				System.out.println("더이상 생성 불가");
+			}
+			
+		}
+		
+		
+	}
+	private void makeAccountCode() {
+		Random ran = new Random();
+		while(true) {
+			
+			boolean check = true;
+			
+			
+			int num= ran.nextInt(899999)+100000;
+			
+			for (int i = 0; i < am.getSize(); i++) {
+		if(num ==am.getAccount(i).getAccountNum())	{
+			check=false;
+		}
+				
+			}
+			
+			
+			if(check) {
+				break;
+			}
+		}
+		
+	}
 	
-//==============로그인======================
-private void login() {
 	
-	System.out.println("회원가입");
-	String id = inputToString("id");
-	String password = inputToString("password");
-}
-
-
-
-
+	
+	
+	//==============로그인======================
 
 	public void run() {
-
+		inIt();
 		while (true) {
 
 			System.out.println(this.name);
@@ -131,7 +202,7 @@ private void login() {
 			} else if (sel == 3) {
 			} else if (sel == 4) {
 			} else if (sel == 5) {
-			} else if (sel == 6) {
+			} else if (sel == 6) { this.log=-1;
 			} else if (sel == 0) {
 			}
 

@@ -6,8 +6,12 @@ public class AccountManager {
 
 	private static ArrayList<Account> list = new ArrayList<Account>();
 
-	
-	
+	public int getSize() {// 인덱스를 받아 반환
+
+
+		return this.list.size();
+
+	}
 	//Create
 	public void createAccount(Account account) {
 		this.list.add(account);
@@ -25,7 +29,6 @@ public class AccountManager {
 		Account tmp = new Account(id, accountNum, cash);
 		return tmp;
 	}
-
 	// update
 	public void setAccount(int index, Account account) {
 		list.set(index, account);
