@@ -6,7 +6,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		Bank bank = new Bank("ezen");
-		
+		bank.run();
 	}
 
 }
