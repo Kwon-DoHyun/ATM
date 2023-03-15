@@ -42,7 +42,9 @@ public class Bank {
 		for (int i = 0; i < um.getSize(); i++) {
 			System.out.println(um.getUser(i));
 		}
-
+		if (log != -1) {
+			System.out.println(um.getUser(log).getName() + "님 로그인");
+		}
 	}
 
 //	==============기본셋팅======================
@@ -59,26 +61,15 @@ public class Bank {
 
 		User newUser = new User(name, id, password);
 
-		if (duppleCheckUser(newUser)) {
+		if (um.addUser(newUser)) {
 
-			um.addUser(newUser);
+			System.out.println(id + "생성 완료");
+
 		} else {
 			System.out.println("이미 존재하는 계정입니다");
 
 		}
 
-	}
-
-	private boolean duppleCheckUser(User user) {
-
-		boolean chk = true;
-		for (int i = 0; i < um.getSize(); i++) {
-			if (user.getId().equals(um.getUser(i).getId()) && user.getName().equals(um.getUser(i).getName())) {
-				chk = false;
-			}
-		}
-
-		return chk;
 	}
 
 //==============회원탈퇴======================
@@ -89,44 +80,42 @@ public class Bank {
 		String delPassword = inputToString("password");
 
 		User delUser = new User(delName, delId, delPassword);
-		int idx = leaveCheckUser(delUser);
-		if (idx != -1) {
 
-			um.delUser(idx);
-		} else {
-			System.out.println("존재하지 않는 계정입니다");
+		if (um.delUser(delUser)) {
 
-		}
-
-	}
-
-	public int leaveCheckUser(User delUser) {
-		int index = -1;
-		for (int i = 0; i < um.getSize(); i++) {
-			if (delUser.equals(um.getUser(i))) {
-				index = i;
+			System.out.println(delId + "삭제 완료");
+			if (delId.equals(um.getUser(log).getName())) {
+				log = -1;
 			}
+		} else {
+
+			System.out.printf("아이디/비밀번호 오류.");
+
 		}
 
-		return index;
 	}
 
 //==============로그인======================
 	private void login() {
+		if(log==-1) {
+			System.out.println("로그인");
+			String id = inputToString("id");
+			String password = inputToString("password");
 
-		System.out.println("로그인");
-		String id = inputToString("id");
-		String password = inputToString("password");
+			User loginUser = new User(null, id, password);
 
-		User loginUser = new User(null, id, password);
+			int idx = checkIdPwToLogin(loginUser);
 
-		int idx = checkIdPwToLogin(loginUser);
-
-		if (idx != -1) {
-			this.log = idx;
-		} else {
-			System.out.println("미존재 계정");
+			if (idx != -1) {
+				this.log = idx;
+			} else {
+				System.out.println("미존재 계정");
+			}
+			
+		}else {
+		System.out.println("로그인 중에는 이용 불가");
 		}
+	
 	}
 
 	private int checkIdPwToLogin(User user) {
@@ -146,22 +135,30 @@ public class Bank {
 	private void openingAccount() {
 
 		if (this.log != -1) {
-			User loginUser = um.getUser(log);
-			if (loginUser.getAccountCount() < 3) {
-				String id = loginUser.getId();
-				int accountNum = makeAccountCode();
 
-				Account newAccount = new Account(id, accountNum, 0);
-				// 이제 만든걸 유저 안 리스트랑 저쪽에 하나씩
-				am.createAccount(newAccount);
-				loginUser.createAccount(newAccount);
-				loginUser.setAccountCount(loginUser.getAccountCount() + 1);
-				System.out.println("완료");
+			// 현재 로그인중인 아이디 인계
+			User loginUser = um.getUser(log);
+			// 현 계정의 계좌 숫자 확인
+			int size = loginUser.getAccountCount();
+			if (size < 3) {
+				// 무작위 6자리 숫자 생성
+				int accountNum = makeAccountCode();
+				// 현 계정 정보와 계좌번호를 통해 새 계정 생성
+				Account newAccount = am.createAccount(loginUser, accountNum);
+				// am에는 이미 저장되었으니 현 계정에 접근용 주소 연결
+
+				// 로그인 계정을 찾아서 신규 계좌 삽입(후 계좌 개수 증가)
+				// 이름 변경
+				um.addAccountToUser(loginUser, newAccount);
+
+				System.out.println("계좌 " + newAccount.getAccountNum() + "생성완료");
 
 			} else {
 				System.out.println("더이상 생성 불가");
 			}
 
+		}else {
+			System.out.println("로그인 중에만 이용 가능");
 		}
 
 	}
@@ -180,41 +177,53 @@ public class Bank {
 				if (num == am.getAccount(i).getAccountNum()) {
 					check = false;
 				}
-
 			}
-
 			if (check) {
 				break;
 			}
 		}
-
 		return num;
 	}
 
 	// ==============계좌 삭제======================
 	private void closingAccount() {
+
 		if (this.log != -1) {
 
 			User loginUser = um.getUser(log);
+			if (loginUser.getAccountCount() != 0) {
+				um.getUser(log).printAccList();
+				System.out.println();
+				loginUser.printAccList();
 
-			for (int i = 0; i < loginUser.getAccountCount(); i++) {
-				Account a = loginUser.getAccsAccounts().get(i);
-				System.out.printf("%d acc:%d cash:%d \n", i + 1, a.getAccountNum(), a.getCash());
+				int idx = inputToInt("삭제할 계정의 번호(취소:0)") - 1;
+				if (idx >= 0 && idx < loginUser.getAccountCount()) {
+				if(	am.findDeleteAccount(loginUser, idx)) {
+					um.deleteAccountFromUser(loginUser, idx);
+					
+				}else {
+					System.out.println("삭제 실패");
+					
+				}
 
+					
+					
+					
+					
+					
+					
+				} else if (idx == -1) {
+					System.out.println("삭제를 취소합니다");
+				} else {
+					System.out.println("번호를 다시 입력하십시오");
+				}
+
+			}else {
+				System.out.println("계좌가 없습니다.");
 			}
 
-			int idx = inputToInt("삭제할 계정의 번호") - 1;
-			if (idx >= 0 && idx < loginUser.getAccountCount()) {
-				
-				int num = loginUser.getAccsAccounts().get(idx).getAccountNum();
-				System.out.println("계좌번호"+num+"삭제완료");
-				loginUser.getAccsAccounts().remove(idx);
-				loginUser.setAccountCount(loginUser.getAccountCount() - 1);
-				
-			} else {
-				System.out.println("번호를 다시 입력하십시오");
-			}
-
+		} else {
+			System.out.println("사용 불가능 메뉴");
 		}
 
 	}
@@ -227,7 +236,7 @@ public class Bank {
 
 			System.out.println(this.name);
 			print();
-			System.out.print("1. 회원가입\n2.회원탈퇴\n3.계좌신청\n4.계좌탈퇴\n5.로그인\n6.로그아웃\n0.종료\n");
+			System.out.print("1. 회원가입 2.회원탈퇴 3.계좌신청\n4.계좌탈퇴 5.로그인 6.로그아웃\n0.종료\n");
 			int sel = inputToInt("입력");
 			if (sel == 1) {
 				signUp();
@@ -250,3 +259,26 @@ public class Bank {
 
 	// 뱅킹 관련 메소드
 }
+//
+//private boolean duppleCheckUser(User user) {
+//
+//	boolean chk = true;
+//	for (int i = 0; i < um.getSize(); i++) {
+//		if (user.getId().equals(um.getUser(i).getId()) && user.getName().equals(um.getUser(i).getName())) {
+//			chk = false;
+//		}
+//	}
+//
+//	return chk;
+//}
+
+//public int leaveCheckUser(User delUser) {
+//	int index = -1;
+//	for (int i = 0; i < um.getSize(); i++) {
+//		if (delUser.equals(um.getUser(i))) {
+//			index = i;
+//		}
+//	}
+//
+//	return index;
+//}
