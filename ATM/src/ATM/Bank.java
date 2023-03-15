@@ -233,9 +233,16 @@ public class Bank {
 	public void run() {
 		inIt();
 		while (true) {
-
+			if(isLoggedIn()) {
+				printMainMenu();
+			}
+			else {
+				printSubMain();
+			}
 			System.out.println(this.name);
 			print();
+			
+			
 			System.out.print("1. È¸¿ø°¡ÀÔ 2.È¸¿øÅ»Åğ 3.°èÁÂ½ÅÃ»\n4.°èÁÂÅ»Åğ 5.·Î±×ÀÎ 6.·Î±×¾Æ¿ô\n0.Á¾·á\n");
 			int sel = inputToInt("ÀÔ·Â");
 			if (sel == 1) {
