@@ -1,6 +1,9 @@
 package ATM;
 
+<<<<<<< HEAD
 import java.util.Random;
+=======
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 import java.util.Scanner;
 
 public class Bank {
@@ -10,9 +13,14 @@ public class Bank {
 	private String name;
 	private UserManager um = new UserManager();
 	private AccountManager am = new AccountManager();
+<<<<<<< HEAD
 	private int log;
 
 	public Bank(String name) {
+=======
+
+	Bank(String name) {
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 		this.name = name;
 	}
 
@@ -37,11 +45,16 @@ public class Bank {
 		return input;
 	}
 
+<<<<<<< HEAD
 	private void print() {
+=======
+	void print() {
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 
 		for (int i = 0; i < um.getSize(); i++) {
 			System.out.println(um.getUser(i));
 		}
+<<<<<<< HEAD
 		if (log != -1) {
 			System.out.println(um.getUser(log).getName() + "¥‘ ∑Œ±◊¿Œ");
 		}
@@ -54,6 +67,13 @@ public class Bank {
 
 //	==============»∏ø¯∞°¿‘======================
 	private void signUp() {
+=======
+
+	}
+
+//	==============»∏ø¯∞°¿‘======================
+	void signUp() {
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 
 		String name = inputToString("¿Ã∏ß");
 		String id = inputToString("id");
@@ -61,10 +81,16 @@ public class Bank {
 
 		User newUser = new User(name, id, password);
 
+<<<<<<< HEAD
 		if (um.addUser(newUser)) {
 
 			System.out.println(id + "ª˝º∫ øœ∑·");
 
+=======
+		if (duppleCheckUser(newUser)) {
+
+			um.addUser(newUser);
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 		} else {
 			System.out.println("¿ÃπÃ ¡∏¿Á«œ¥¬ ∞Ë¡§¿‘¥œ¥Ÿ");
 
@@ -72,6 +98,7 @@ public class Bank {
 
 	}
 
+<<<<<<< HEAD
 //==============»∏ø¯≈ª≈======================
 	void leave() {
 		System.out.println("»∏ø¯ ≈ª≈");
@@ -125,12 +152,21 @@ public class Bank {
 		for (int i = 0; i < um.getSize(); i++) {
 			if (user.getId().equals(um.getUser(i).getId()) && user.getPassword().equals(um.getUser(i).getPassword())) {
 				chk = i;
+=======
+	boolean duppleCheckUser(User user) {
+
+		boolean chk = true;
+		for (int i = 0; i < um.getSize(); i++) {
+			if (user.getId().equals(um.getUser(i).getId()) && user.getName().equals(um.getUser(i).getName())) {
+				chk = false;
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 			}
 		}
 
 		return chk;
 	}
 
+<<<<<<< HEAD
 	// ==============∞≥º≥======================
 	private void openingAccount() {
 
@@ -244,10 +280,21 @@ public class Bank {
 			
 			
 			System.out.print("1. »∏ø¯∞°¿‘ 2.»∏ø¯≈ª≈ 3.∞Ë¡¬Ω≈√ª\n4.∞Ë¡¬≈ª≈ 5.∑Œ±◊¿Œ 6.∑Œ±◊æ∆øÙ\n0.¡æ∑·\n");
+=======
+//==============»∏ø¯≈ª≈======================
+	public void run() {
+
+		while (true) {
+
+			System.out.println(this.name);
+			print();
+			System.out.print("1. »∏ø¯∞°¿‘\n2.»∏ø¯≈ª≈\n3.∞Ë¡¬Ω≈√ª\n4.∞Ë¡¬≈ª≈\n5.∑Œ±◊¿Œ\n6.∑Œ±◊æ∆øÙ\n0.¡æ∑·\n");
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 			int sel = inputToInt("¿‘∑¬");
 			if (sel == 1) {
 				signUp();
 			} else if (sel == 2) {
+<<<<<<< HEAD
 				leave();
 			} else if (sel == 3) {
 				openingAccount();
@@ -257,6 +304,12 @@ public class Bank {
 				login();
 			} else if (sel == 6) {
 				this.log = -1;
+=======
+			} else if (sel == 3) {
+			} else if (sel == 4) {
+			} else if (sel == 5) {
+			} else if (sel == 6) {
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 			} else if (sel == 0) {
 			}
 

@@ -8,6 +8,10 @@ public class User {
 	String id;
 	String password;
 
+<<<<<<< HEAD
+=======
+	int accountCount;
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 	ArrayList<Account> accsAccounts;
 
 	User(String name, String id, String password) {
@@ -17,6 +21,7 @@ public class User {
 
 	}
 
+<<<<<<< HEAD
 	User(String name, String id, String password, ArrayList<Account> accsAccounts) {
 		this.name = name;
 		this.id = id;
@@ -84,5 +89,30 @@ public class User {
 	
 	
 	
+=======
+	public String getName() {
+		return name;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public int getAccountCount() {
+		return accountCount;
+	}
+
+	public String toString() {
+		return String.format("%s [id:%s pw:%s] /(%d)", this.name, this.id, this.password, this.accountCount);
+
+	}
+
+//	acc
+	// 계좌를 여기에 넣나 안넣냐 정도
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 
 }

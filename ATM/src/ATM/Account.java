@@ -1,6 +1,7 @@
 package ATM;
 
 public class Account {
+<<<<<<< HEAD
 
 
 	
@@ -36,4 +37,7 @@ public class Account {
 		return String.format("%s [%d] cash: %d", this.id, this.accountNum, this.cash);
 
 	}
+=======
+//¸®¹Ô 3
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 }

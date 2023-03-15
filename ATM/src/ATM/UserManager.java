@@ -8,6 +8,7 @@ import javax.naming.spi.DirStateFactory.Result;
 public class UserManager {
 	private static ArrayList<User> list = new ArrayList<User>();
 
+<<<<<<< HEAD
 	public int getSize() {// 사이즈를 받아 반환
 
 		return this.list.size();
@@ -54,10 +55,23 @@ public class UserManager {
 			}
 		}
 		return index;
+=======
+	// 유저에 관한 CRUD를 여 안에
+	// 만들기
+	public int getSize() {// 인덱스를 받아 반환
+
+
+		return this.list.size();
+
+	} void addUser(User user) {// 유저를 받아 리스트에 추가
+		this.list.add(user);
+
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 	}
 
 	public User getUser(int index) {// 인덱스를 받아 반환
 
+<<<<<<< HEAD
 
 		User user = this.list.get(index);
 
@@ -66,12 +80,18 @@ public class UserManager {
 				user.getId(), 
 				user.getPassword(), 
 				user.getAccountList());
+=======
+		User user = this.list.get(index);
+
+		User tmp = user;
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 
 		return tmp;
 
 	}
 
 	public User getUserById(String id) {// 아이디를 받아 계정 반환)
+<<<<<<< HEAD
 		User user = null;
 		int idx = indexOfById(id);
 		if (idx != -1) {
@@ -79,6 +99,19 @@ public class UserManager {
 		}
 
 		return user;
+=======
+
+		int idx = -1;
+		for (int i = 0; i < list.size(); i++) {
+			User tmp = getUser(i);
+			if (id.equals(tmp.getId())) {
+				idx = i;
+			}
+		}
+
+		return getUser(idx);
+
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 	}
 
 //업데이트
@@ -87,6 +120,7 @@ public class UserManager {
 
 	}
 
+<<<<<<< HEAD
 	
 	
 	
@@ -106,6 +140,12 @@ public class UserManager {
 
 		}
 		return false;
+=======
+	public void delUser(int index) {
+
+		this.list.remove(index);
+
+>>>>>>> af76340467a83b7b201f19d0976578229ced924e
 	}
 
 	public void delUserById(String id) {
